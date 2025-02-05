@@ -5,14 +5,12 @@ import java.util.List;
 
 public class DailyTask {
     private Date actionDate;
-    private WeekInfo weekInfo;
-    private List<Report> weekReport;
+    private List<Report> report;
     private List<Task> tasks;
 
-    public DailyTask(Date actionDate, WeekInfo weekInfo, List<Report> weekReport, List<Task> tasks) {
+    public DailyTask(Date actionDate, List<Report> report, List<Task> tasks) {
         this.actionDate = actionDate;
-        this.weekInfo = weekInfo;
-        this.weekReport = weekReport;
+        this.report = report;
         this.tasks = tasks;
     }
 
@@ -20,15 +18,11 @@ public class DailyTask {
         return actionDate;
     }
 
-    public WeekInfo getWeekInfo() {
-        return weekInfo;
-    }
-
-    public List<Report> getWeekReport() {
-        return weekReport;
+    public List<Report> getReport() {
+        return report;
     }
 
     public List<Task> getTasks() {
         return tasks;
-    }   
+    }
 }

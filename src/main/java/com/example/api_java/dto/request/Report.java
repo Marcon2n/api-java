@@ -1,13 +1,17 @@
 package com.example.api_java.dto.request;
 
+import java.util.Date;
+
 import com.example.api_java.util.JobType;
 
 public class Report {
+    private Date date;
     private JobType jobType;
     private int totalDebt;
     private int completeDebt;
     private int incompleteDebt;
     private int totalDistance;
+    private float completedRate;
 
     public Report(JobType jobType, int totalDebt, int completeDebt, int incompleteDebt, int totalDistance) {
         this.jobType = jobType;
@@ -15,6 +19,14 @@ public class Report {
         this.completeDebt = completeDebt;
         this.incompleteDebt = incompleteDebt;
         this.totalDistance = totalDistance;
+    }
+
+    public Report(Date date, int totalDebt, int completeDebt, int incompleteDebt, int completedRate) {
+        this.date = date;
+        this.totalDebt = totalDebt;
+        this.completeDebt = completeDebt;
+        this.incompleteDebt = incompleteDebt;
+        this.completedRate = this.completeDebt / this.totalDebt;
     }
 
     public JobType getJobType() {
@@ -33,5 +45,11 @@ public class Report {
         return totalDistance;
     }
 
-    
+    public Date getDate() {
+        return date;
+    }
+
+    public float getCompletedRate() {
+        return completedRate;
+    }    
 }
