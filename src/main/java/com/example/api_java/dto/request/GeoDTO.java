@@ -1,10 +1,10 @@
 package com.example.api_java.dto.request;
 
-public class Geo {
+public class GeoDTO {
     private String geoLong;
     private String geoLat;
 
-    public Geo(String geoLong, String geoLat) {
+    public GeoDTO(String geoLong, String geoLat) {
         this.geoLong = geoLong;
         this.geoLat = geoLat;
     }

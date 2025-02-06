@@ -1,15 +1,13 @@
 package com.example.api_java.dto.request;
 
-import java.util.Date;
-
-public class WeekInfo {
+public class WeekInfoDTO {
     private int week;
     private int month;
     private int year;
-    private Date fromDate;
-    private Date toDate;
+    private String fromDate;
+    private String toDate;
 
-    public WeekInfo(int week, int month, int year, Date fromDate, Date toDate) {
+    public WeekInfoDTO(int week, int month, int year, String fromDate, String toDate) {
         this.week = week;
         this.month = month;
         this.year = year;
@@ -20,19 +18,21 @@ public class WeekInfo {
     public int getWeek() {
         return week;
     }
+
     public int getMonth() {
         return month;
     }
+
     public int getYear() {
         return year;
     }
-    public Date getFromDate() {
+
+    public String getFromDate() {
         return fromDate;
     }
-    public Date getToDate() {
+
+    public String getToDate() {
         return toDate;
     }
-
-    
 
 }

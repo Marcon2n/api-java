@@ -2,11 +2,11 @@ package com.example.api_java.dto.request;
 
 import java.util.List;
 
-public class DailyReportUser {
+public class DailyReportUserDTO {
     private String assignee;
-    private List<Report> data;
+    private List<ReportDTO> data;
 
-    public DailyReportUser(String assignee, List<Report> data) {
+    public DailyReportUserDTO(String assignee, List<ReportDTO> data) {
         this.assignee = assignee;
         this.data = data;
     }
@@ -15,7 +15,7 @@ public class DailyReportUser {
         return assignee;
     }
 
-    public List<Report> getData() {
+    public List<ReportDTO> getData() {
         return data;
     }
 }

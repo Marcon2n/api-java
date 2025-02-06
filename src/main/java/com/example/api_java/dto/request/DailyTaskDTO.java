@@ -3,12 +3,12 @@ package com.example.api_java.dto.request;
 import java.util.Date;
 import java.util.List;
 
-public class DailyTask {
+public class DailyTaskDTO {
     private Date actionDate;
-    private List<Report> report;
-    private List<Task> tasks;
+    private List<ReportDTO> report;
+    private List<TaskDTO> tasks;
 
-    public DailyTask(Date actionDate, List<Report> report, List<Task> tasks) {
+    public DailyTaskDTO(Date actionDate, List<ReportDTO> report, List<TaskDTO> tasks) {
         this.actionDate = actionDate;
         this.report = report;
         this.tasks = tasks;
@@ -18,11 +18,11 @@ public class DailyTask {
         return actionDate;
     }
 
-    public List<Report> getReport() {
+    public List<ReportDTO> getReport() {
         return report;
     }
 
-    public List<Task> getTasks() {
+    public List<TaskDTO> getTasks() {
         return tasks;
     }
 }

@@ -1,11 +1,11 @@
 package com.example.api_java.dto.request;
 
-public class MapDataPoint {
+public class MapDataPointDTO {
     private String name;
     private String address;
-    private Geo geo;
+    private GeoDTO geo;
 
-    public MapDataPoint(String name, String address, Geo geo) {
+    public MapDataPointDTO(String name, String address, GeoDTO geo) {
         this.name = name;
         this.address = address;
         this.geo = geo;
@@ -19,7 +19,7 @@ public class MapDataPoint {
         return address;
     }
 
-    public Geo getGeo() {
+    public GeoDTO getGeo() {
         return geo;
     }
 }

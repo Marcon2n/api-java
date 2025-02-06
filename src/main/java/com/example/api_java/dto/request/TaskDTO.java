@@ -2,7 +2,7 @@ package com.example.api_java.dto.request;
 
 import com.example.api_java.util.ActionStatus;
 
-public class Task {
+public class TaskDTO {
     private String id;
     private int order;
     private String jobType;
@@ -10,10 +10,11 @@ public class Task {
     private String cif;
     private String cusName;
     private String cusAddress;
-    private Geo geo;
+    private GeoDTO geo;
     private ActionStatus status;
 
-    public Task(String id, int order, String jobType, String debtCode, String cif, String cusName, String cusAddress, Geo geo, ActionStatus status) {
+    public TaskDTO(String id, int order, String jobType, String debtCode, String cif, String cusName, String cusAddress,
+            GeoDTO geo, ActionStatus status) {
         this.id = id;
         this.order = order;
         this.jobType = jobType;
@@ -28,26 +29,32 @@ public class Task {
     public String getId() {
         return id;
     }
+
     public int getOrder() {
         return order;
     }
+
     public String getJobType() {
         return jobType;
     }
+
     public String getDebtCode() {
         return debtCode;
     }
+
     public String getCif() {
         return cif;
     }
+
     public String getCusName() {
         return cusName;
     }
+
     public String getCusAddress() {
         return cusAddress;
     }
 
-    public Geo getGeo() {
+    public GeoDTO getGeo() {
         return geo;
     }
 
