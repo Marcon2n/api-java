@@ -1,19 +1,19 @@
 package com.example.api_java.dto.request;
 
 public class GeoDTO {
-    private String geoLong;
-    private String geoLat;
+    private Float geoLong;
+    private Float geoLat;
 
-    public GeoDTO(String geoLong, String geoLat) {
+    public GeoDTO(Float geoLong, Float geoLat) {
         this.geoLong = geoLong;
         this.geoLat = geoLat;
     }
 
-    public String getGeoLong() {
+    public Float getGeoLong() {
         return geoLong;
     }
 
-    public String getGeoLat() {
+    public Float getGeoLat() {
         return geoLat;
     }
 }

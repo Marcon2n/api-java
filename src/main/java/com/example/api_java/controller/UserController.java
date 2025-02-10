@@ -3,24 +3,32 @@ package com.example.api_java.controller;
 import com.example.api_java.dto.request.DailyReportUserDTO;
 import com.example.api_java.dto.request.MapDataPairDTO;
 import com.example.api_java.dto.request.UserWeekPlanDTO;
+import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekReportAllUserDTO;
+import com.example.api_java.service.JobPlanService;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @CrossOrigin("http://localhost:2001")
 public class UserController {
 
+    private final JobPlanService jobPlanService;
+
+    @Autowired
+    public UserController(JobPlanService jobPlanService) {
+        this.jobPlanService = jobPlanService;
+    }
+
     @PostMapping("/weekly-plan/user")
-    public UserWeekPlanDTO getWeekPlanByUser(@RequestBody Object request) {
+    public UserWeekPlanDTO getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
         // TODO: process POST request
         System.out.println(request);
-        return new UserWeekPlanDTO(null, null, null, null);
+        // return new UserWeekPlanDTO(null, null, null, null);
+        return jobPlanService.getJobPlan(request);
     }
 
     @PostMapping("/weekly-plan/result")

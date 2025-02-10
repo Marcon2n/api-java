@@ -22,7 +22,7 @@ public class JobDailyPlanReport {
     private Integer totalDebt;
     private Integer completedCount;
     private Integer incompletedCount;
-    private Float totalDistance;
+    private int totalDistance;
 
     public String getId() {
         return id;
@@ -80,11 +80,11 @@ public class JobDailyPlanReport {
         this.incompletedCount = incompletedCount;
     }
 
-    public Float getTotalDistance() {
+    public int getTotalDistance() {
         return totalDistance;
     }
 
-    public void setTotalDistance(Float totalDistance) {
+    public void setTotalDistance(int totalDistance) {
         this.totalDistance = totalDistance;
     }
 

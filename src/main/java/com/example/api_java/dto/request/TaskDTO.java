@@ -11,10 +11,10 @@ public class TaskDTO {
     private String cusName;
     private String cusAddress;
     private GeoDTO geo;
-    private ActionStatus status;
+    private String status;
 
     public TaskDTO(String id, int order, String jobType, String debtCode, String cif, String cusName, String cusAddress,
-            GeoDTO geo, ActionStatus status) {
+            GeoDTO geo, String status) {
         this.id = id;
         this.order = order;
         this.jobType = jobType;
@@ -58,7 +58,7 @@ public class TaskDTO {
         return geo;
     }
 
-    public ActionStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 }

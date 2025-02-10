@@ -18,7 +18,7 @@ public class JobWeeklyPlanReport {
     private Integer totalDebt;
     private Integer completedCount;
     private Integer incompletedCount;
-    private Float totalDistance;
+    private Integer totalDistance;
 
     public String getId() {
         return id;
@@ -68,11 +68,11 @@ public class JobWeeklyPlanReport {
         this.incompletedCount = incompletedCount;
     }
 
-    public Float getTotalDistance() {
+    public Integer getTotalDistance() {
         return totalDistance;
     }
 
-    public void setTotalDistance(Float totalDistance) {
+    public void setTotalDistance(Integer totalDistance) {
         this.totalDistance = totalDistance;
     }
 }
