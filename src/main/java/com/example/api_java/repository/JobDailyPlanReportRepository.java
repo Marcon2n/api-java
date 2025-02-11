@@ -12,6 +12,6 @@ import com.example.api_java.model.JobDailyPlanReport;
 @Repository
 public interface JobDailyPlanReportRepository extends JpaRepository<JobDailyPlanReport, String> {
 
-    @Query("SELECT r FROM JobDailyPlanReport r WHERE r.jobWeeklyPlan.id IN :jobWeeklyPlanIds")
-    List<JobDailyPlanReport> findByJobWeeklyPlanIdIn(@Param("jobWeeklyPlanIds") List<String> jobWeeklyPlanIds);
+    @Query("SELECT r FROM JobDailyPlanReport r WHERE r.jobDailyPlan.id IN :jobDailyPlanIds")
+    List<JobDailyPlanReport> findByJobDailyPlanIds(@Param("jobDailyPlanIds") List<String> jobDailyPlanIds);
 }

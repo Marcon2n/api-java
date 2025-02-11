@@ -134,4 +134,22 @@ public class JobDailyPlan {
         this.locked = locked;
     }
 
+    @Override
+    public String toString() {
+        return "JobDailyPlan{" +
+                "id='" + id + '\'' +
+                ", jobWeeklyPlan=" + jobWeeklyPlan +
+                ", assignee='" + assignee + '\'' +
+                ", assignor='" + assignor + '\'' +
+                ", debtId='" + debtId + '\'' +
+                ", debtCode='" + debtCode + '\'' +
+                ", cif='" + cif + '\'' +
+                ", geo=" + geo +
+                ", actionDate='" + actionDate + '\'' +
+                ", jobType='" + jobType + '\'' +
+                ", order=" + order +
+                ", status='" + status + '\'' +
+                ", locked=" + locked +
+                '}';
+    }
 }

@@ -4,8 +4,14 @@ import java.util.List;
 
 public class DailyTaskDTO {
     private String actionDate;
-    private List<ReportDTO> report;
+    private ReportDTO report;
     private List<TaskDTO> tasks;
+
+    public DailyTaskDTO(String actionDate, ReportDTO report, List<TaskDTO> tasks) {
+        this.actionDate = actionDate;
+        this.report = report;
+        this.tasks = tasks;
+    }
 
     public String getActionDate() {
         return actionDate;
@@ -15,11 +21,11 @@ public class DailyTaskDTO {
         this.actionDate = actionDate;
     }
 
-    public List<ReportDTO> getReport() {
+    public ReportDTO getReport() {
         return report;
     }
 
-    public void setReport(List<ReportDTO> report) {
+    public void setReport(ReportDTO report) {
         this.report = report;
     }
 

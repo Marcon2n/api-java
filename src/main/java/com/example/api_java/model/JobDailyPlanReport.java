@@ -88,4 +88,15 @@ public class JobDailyPlanReport {
         this.totalDistance = totalDistance;
     }
 
+    @Override
+    public String toString() {
+        return "DailyPlanReport{" +
+                "id='" + id + '\'' +
+                ", jobType=" + jobType +
+                ", totalDebt='" + totalDebt + '\'' +
+                ", completedCount='" + completedCount + '\'' +
+                ", incompletedCount='" + incompletedCount + '\'' +
+                ", totalDistance='" + totalDistance + '\'' +
+                '}';
+    }
 }

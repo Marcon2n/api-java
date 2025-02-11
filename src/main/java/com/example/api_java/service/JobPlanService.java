@@ -1,8 +1,13 @@
 package com.example.api_java.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,132 +20,147 @@ import com.example.api_java.dto.request.TaskDTO;
 import com.example.api_java.dto.request.UserWeekPlanDTO;
 import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekInfoDTO;
+import com.example.api_java.model.Geo;
 import com.example.api_java.model.JobDailyPlan;
+import com.example.api_java.model.JobDailyPlanReport;
 import com.example.api_java.model.JobWeeklyPlan;
+import com.example.api_java.model.JobWeeklyPlanReport;
 import com.example.api_java.repository.JobDailyPlanReportRepository;
 import com.example.api_java.repository.JobDailyPlanRepository;
 import com.example.api_java.repository.JobWeeklyPlanReportRepository;
 import com.example.api_java.repository.JobWeeklyPlanRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class JobPlanService {
 
-        private final JobWeeklyPlanRepository jobWeeklyPlanRepository;
-        private final JobDailyPlanRepository jobDailyPlanRepository;
-        private final JobWeeklyPlanReportRepository jobWeeklyPlanReportRepository;
-        private final JobDailyPlanReportRepository jobDailyPlanReportRepository;
+        @Autowired
+        private JobWeeklyPlanRepository jobWeeklyPlanRepository;
 
         @Autowired
-        public JobPlanService(JobWeeklyPlanRepository jobWeeklyPlanRepository,
-                        JobDailyPlanRepository jobDailyPlanRepository,
-                        JobWeeklyPlanReportRepository jobWeeklyPlanReportRepository,
-                        JobDailyPlanReportRepository jobDailyPlanReportRepository) {
-                this.jobWeeklyPlanRepository = jobWeeklyPlanRepository;
-                this.jobDailyPlanRepository = jobDailyPlanRepository;
-                this.jobWeeklyPlanReportRepository = jobWeeklyPlanReportRepository;
-                this.jobDailyPlanReportRepository = jobDailyPlanReportRepository;
+        private JobWeeklyPlanReportRepository jobWeeklyPlanReportRepository;
+
+        @Autowired
+        private JobDailyPlanRepository jobDailyPlanRepository;
+
+        @Autowired
+        private JobDailyPlanReportRepository jobDailyPlanReportRepository;
+
+        private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        public Optional<UserWeekPlanDTO> getJobPlan(UserWeekPlanRequestDTO jobRequest) {
+                // Fetch the record that matches the criteria from the job_weekly_plan table
+                Optional<JobWeeklyPlan> weeklyPlanOpt = jobWeeklyPlanRepository.findByAssigneeAndWeekAndMonthAndYear(
+                                jobRequest.getAssignee(), jobRequest.getWeek(), jobRequest.getMonth(),
+                                jobRequest.getYear());
+
+                // Check if a record is found and map it to UserWeekPlanDTO
+                if (weeklyPlanOpt.isPresent()) {
+                        JobWeeklyPlan weeklyPlan = weeklyPlanOpt.get();
+
+                        ReportDTO weekReportDTO = getWeekReportFromPlan(weeklyPlan.getId());
+                        List<DailyTaskDTO> dailyTaskDTO = getDailyTask(weeklyPlan.getId());
+                        return Optional.of(mapToUserWeekPlanDTO(weeklyPlan, weekReportDTO, dailyTaskDTO));
+                } else {
+                        // Return an empty Optional if no record is found
+                        return Optional.empty();
+                }
         }
 
-        public UserWeekPlanDTO getJobPlan(UserWeekPlanRequestDTO jobRequest) {
-                System.out.println(jobRequest);
-                List<JobWeeklyPlan> jobWeeklyPlans = jobWeeklyPlanRepository.findByAssigneeAndWeekAndMonthAndYear(
-                                jobRequest.getAssignee(), jobRequest.getWeek(), jobRequest.getMonth(),
-                                jobRequest.getYear())
-                                .orElseThrow(() -> new EntityNotFoundException("JobWeeklyPlans not found"));
+        private ReportDTO getWeekReportFromPlan(String jobWeeklyPlanId) {
+                // Fetch the week report for the given jobWeeklyPlanId
+                JobWeeklyPlanReport weekReport = jobWeeklyPlanReportRepository.findByJobWeeklyPlanId(jobWeeklyPlanId);
 
-                // Extracting IDs
-                List<String> jobWeeklyPlanIds = jobWeeklyPlans.stream()
-                                .map(JobWeeklyPlan::getId)
-                                .collect(Collectors.toList());
+                // Map the week report to ReportDTO
+                return new ReportDTO(
+                                weekReport.getJobType(),
+                                weekReport.getTotalDebt(),
+                                weekReport.getCompletedCount(),
+                                weekReport.getIncompletedCount(),
+                                weekReport.getTotalDistance());
+        }
 
-                WeekInfoDTO weekInfo = new WeekInfoDTO(
-                                jobWeeklyPlans.get(0).getWeek(),
-                                jobWeeklyPlans.get(0).getMonth(),
-                                jobWeeklyPlans.get(0).getYear(),
-                                jobWeeklyPlans.get(0).getFromDate(),
-                                jobWeeklyPlans.get(0).getToDate());
+        private List<DailyTaskDTO> getDailyTask(String jobWeekPlanId) {
+                System.out.println(jobWeekPlanId);
+                // Get list of all job_daily_plan have same jobWeekPlanId
+                List<JobDailyPlan> jobDailyPlans = jobDailyPlanRepository.findByJobWeeklyPlanId(jobWeekPlanId);
 
-                // ReportDTO weekReport =
-                // jobWeeklyPlanReportRepository.findByJobWeeklyPlanIdIn(jobWeeklyPlanIds)
-                // .stream()
-                // .map(report -> new ReportDTO(
-                // report.getJobType(),
-                // report.getTotalDebt(),
-                // report.getCompletedCount(),
-                // report.getIncompletedCount(),
-                // report.getTotalDistance()))
-                // .reduce(new ReportDTO("", 0, 0, 0, 0), (dto, report) -> {
-                // dto.setTotalDebt(dto.getTotalDebt() + report.getTotalDebt());
-                // dto.setCompleteDebt(dto.getCompleteDebt() + report.getCompleteDebt());
-                // dto.setIncompleteDebt(dto.getIncompleteDebt() + report.getIncompleteDebt());
-                // dto.setTotalDistance(dto.getTotalDistance() + report.getTotalDistance());
-                // return dto;
-                // }, (dto1, dto2) -> {
-                // dto1.setTotalDebt(dto1.getTotalDebt() + dto2.getTotalDebt());
-                // dto1.setCompleteDebt(dto1.getCompleteDebt() + dto2.getCompleteDebt());
-                // dto1.setIncompleteDebt(dto1.getIncompleteDebt() + dto2.getIncompleteDebt());
-                // dto1.setTotalDistance(dto1.getTotalDistance() + dto2.getTotalDistance());
-                // return dto1;
-                // });
+                // Check log list of all job_daily_plan
+                // System.out.println(jobDailyPlans);
+                // System.out.println(jobDailyPlans.size());
 
-                // weekReport.setCompletedRate((float) weekReport.getCompleteDebt() /
-                // weekReport.getTotalDebt());
+                // Create list from action_date
+                Map<String, List<JobDailyPlan>> tasksByDate = jobDailyPlans.stream()
+                                .collect(Collectors.groupingBy(JobDailyPlan::getActionDate, TreeMap::new,
+                                                Collectors.toList()));
 
-                ReportDTO WeekReportTest = new ReportDTO("", 0, 0, 0, 0);
+                // Check log list group by action_date
+                // System.out.println(tasksByDate);
 
-                String fromDate = jobWeeklyPlans.get(0).getFromDate();
-                String toDate = jobWeeklyPlans.get(0).getToDate();
+                List<DailyTaskDTO> dailyTaskDTOList = new ArrayList<>();
+                for (String actionDate : tasksByDate.keySet()) {
+                        List<JobDailyPlan> tasksForDate = tasksByDate.get(actionDate);
 
-                List<DailyTaskDTO> dailyTasks = jobDailyPlanRepository.findByJobWeeklyPlanIdIn(jobWeeklyPlanIds)
-                                .stream()
-                                .filter(task -> task.getActionDate().compareTo(fromDate) >= 0 &&
-                                                task.getActionDate().compareTo(toDate) <= 0)
-                                .collect(Collectors.groupingBy(JobDailyPlan::getActionDate))
-                                .entrySet()
-                                .stream()
-                                .map(entry -> {
-                                        DailyTaskDTO dailyTask = new DailyTaskDTO();
-                                        dailyTask.setActionDate(entry.getKey());
+                        // Create report for current action_date in loop
+                        // 1.1 The report need to calculate from job_daily_plan_report which same
+                        // job_weekly_plan_id and field_type (field_type maybe check in token??)
+                        // 1.2 Get list of JobDailyPlan IDs for the current action_date
+                        List<String> jobDailyPlanIds = tasksForDate.stream().map(JobDailyPlan::getId)
+                                        .collect(Collectors.toList());
+                        // 1.3 Fetch JobDailyPlanReport records based on the list of JobDailyPlan IDs
+                        List<JobDailyPlanReport> reportsForDate = jobDailyPlanReportRepository
+                                        .findByJobDailyPlanIds(jobDailyPlanIds);
 
-                                        List<ReportDTO> dailyReport = jobDailyPlanReportRepository
-                                                        .findByJobWeeklyPlanIdIn(jobWeeklyPlanIds)
-                                                        .stream()
-                                                        .filter(report -> jobWeeklyPlanIds
-                                                                        .contains(report.getJobWeeklyPlan().getId()))
-                                                        .map(report -> new ReportDTO(report.getJobType(),
-                                                                        report.getTotalDebt(),
-                                                                        report.getCompletedCount(),
-                                                                        report.getIncompletedCount(),
-                                                                        report.getTotalDistance()))
-                                                        .collect(Collectors.toList());
+                        // Check log list of ids
+                        // System.out.println(reportsForDate);
 
-                                        dailyTask.setReport(dailyReport);
+                        ReportDTO dailyReport = calculateDailyReport(reportsForDate);
 
-                                        List<TaskDTO> tasks = entry.getValue()
-                                                        .stream()
-                                                        .map(task -> {
-                                                                GeoDTO geo = new GeoDTO(task.getGeo().getLongitude(),
-                                                                                task.getGeo().getLatitude());
-                                                                TaskDTO dto = new TaskDTO(task.getId(), task.getOrder(),
-                                                                                task.getJobType(), task.getDebtCode(),
-                                                                                task.getCif(), task.getGeo().getName(),
-                                                                                task.getGeo().getAddress(), geo,
-                                                                                task.getStatus());
-                                                                return dto;
-                                                        })
-                                                        .collect(Collectors.toList());
+                        // Create list tasks for current action_date in loop
+                        // List<TaskDTO> tasks = List.of(new TaskDTO(jobWeekPlanId, 0, jobWeekPlanId,
+                        // jobWeekPlanId,
+                        // jobWeekPlanId, jobWeekPlanId, jobWeekPlanId, null, jobWeekPlanId));
+                        // 2. Return all tasks in each action_date, need mapping geo again to return
+                        // name, address outside, keep long, lat inside
+                        List<TaskDTO> tasks = tasksForDate.stream().map(task -> {
+                                Geo geo = task.getGeo();
+                                GeoDTO geoDTO = new GeoDTO(geo.getLongitude(), geo.getLatitude());
+                                return new TaskDTO(
+                                                task.getId(),
+                                                task.getOrder(),
+                                                task.getJobType(),
+                                                task.getDebtCode(),
+                                                task.getCif(),
+                                                geo.getName(),
+                                                geo.getAddress(),
+                                                geoDTO,
+                                                task.getStatus());
+                        }).collect(Collectors.toList());
 
-                                        dailyTask.setTasks(tasks);
-                                        return dailyTask;
-                                })
-                                .collect(Collectors.toList());
+                        // Create dailyTask for current action_date in loop --> Final result
+                        DailyTaskDTO dailyTaskDTO = new DailyTaskDTO(actionDate, dailyReport, tasks);
+                        dailyTaskDTOList.add(dailyTaskDTO);
+                }
 
-                List<DailyTaskDTO> dailyTaskListTest = List.of(new DailyTaskDTO(), new DailyTaskDTO());
+                return dailyTaskDTOList;
+        };
 
-                UserWeekPlanDTO jobPlanDTO = new UserWeekPlanDTO(null, weekInfo, WeekReportTest, dailyTaskListTest);
+        private ReportDTO calculateDailyReport(List<JobDailyPlanReport> reports) {
+                int totalDebt = reports.size();
+                int completedCount = (int) reports.stream()
+                                .filter(report -> "COMPLETED".equals(report.getJobDailyPlan().getStatus())).count();
+                int incompletedCount = totalDebt - completedCount;
+                int totalDistance = reports.stream().mapToInt(JobDailyPlanReport::getTotalDistance).sum();
 
-                return jobPlanDTO;
+                return new ReportDTO("Field", totalDebt, completedCount, incompletedCount, totalDistance);
+        }
+
+        private UserWeekPlanDTO mapToUserWeekPlanDTO(JobWeeklyPlan weeklyPlan, ReportDTO weekReportDTO,
+                        List<DailyTaskDTO> dailyTaskDTOList) {
+                WeekInfoDTO weekInfoDTO = new WeekInfoDTO(
+                                weeklyPlan.getWeek(), weeklyPlan.getMonth(), weeklyPlan.getYear(),
+                                weeklyPlan.getFromDate(), weeklyPlan.getToDate());
+
+                return new UserWeekPlanDTO(
+                                weeklyPlan.getId(), weekInfoDTO, weekReportDTO, dailyTaskDTOList);
         }
 }

@@ -8,6 +8,7 @@ import com.example.api_java.dto.request.WeekReportAllUserDTO;
 import com.example.api_java.service.JobPlanService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("http://localhost:2001")
 public class UserController {
 
-    private final JobPlanService jobPlanService;
-
     @Autowired
-    public UserController(JobPlanService jobPlanService) {
-        this.jobPlanService = jobPlanService;
-    }
+    private JobPlanService jobPlanService;
 
     @PostMapping("/weekly-plan/user")
-    public UserWeekPlanDTO getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
+    public Optional<UserWeekPlanDTO> getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
         // TODO: process POST request
         System.out.println(request);
         // return new UserWeekPlanDTO(null, null, null, null);

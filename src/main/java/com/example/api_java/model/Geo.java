@@ -2,6 +2,7 @@ package com.example.api_java.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -13,8 +14,11 @@ public class Geo {
     private String address;
     private String objectId;
     private String objectType;
+    @Column(name = "long")
     private Float longitude;
+    @Column(name = "lat")
     private Float latitude;
+    @Column(name = "updated_time")
     private LocalDateTime upDateTime;
 
     public String getId() {
@@ -79,6 +83,20 @@ public class Geo {
 
     public void setUpDateTime(LocalDateTime upDateTime) {
         this.upDateTime = upDateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Geo{" +
+                "id='" + id + '\'' +
+                ", name=" + name +
+                ", address='" + address + '\'' +
+                ", objectId='" + objectId + '\'' +
+                ", objectType='" + objectType + '\'' +
+                ", long='" + longitude + '\'' +
+                ", lat='" + latitude + '\'' +
+                ", updateTime=" + upDateTime +
+                '}';
     }
 
 }

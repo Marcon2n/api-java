@@ -2,6 +2,9 @@ package com.example.api_java.dto.request;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportDTO {
     private Date date;
     private String jobType;
@@ -9,22 +12,28 @@ public class ReportDTO {
     private int completeDebt;
     private int incompleteDebt;
     private int totalDistance;
-    private float completedRate;
+    private Float completedRate;
 
-    public ReportDTO(String jobType, int totalDebt, int completeDebt, int incompleteDebt, int totalDistance) {
+    // Constructor with date and completedRate
+    public ReportDTO(Date date, String jobType, int totalDebt, int completeDebt, int incompleteDebt, int totalDistance,
+            Float completedRate) {
+        this.date = date;
         this.jobType = jobType;
         this.totalDebt = totalDebt;
         this.completeDebt = completeDebt;
         this.incompleteDebt = incompleteDebt;
         this.totalDistance = totalDistance;
+        this.completedRate = completedRate;
     }
 
-    public ReportDTO(Date date, int totalDebt, int completeDebt, int incompleteDebt, int completedRate) {
-        this.date = date;
-        this.totalDebt = totalDebt;
-        this.completeDebt = completeDebt;
-        this.incompleteDebt = incompleteDebt;
-        this.completedRate = this.completeDebt / this.totalDebt;
+    // Constructor without date and completedRate
+    public ReportDTO(String jobType, int totalDebt, int completeDebt, int incompleteDebt, int totalDistance) {
+        this(null, jobType, totalDebt, completeDebt, incompleteDebt, totalDistance, null);
+    }
+
+    // Getters and setters
+    public Date getDate() {
+        return date;
     }
 
     public String getJobType() {
@@ -47,11 +56,7 @@ public class ReportDTO {
         return totalDistance;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public float getCompletedRate() {
+    public Float getCompletedRate() {
         return completedRate;
     }
 
@@ -79,7 +84,7 @@ public class ReportDTO {
         this.totalDistance = totalDistance;
     }
 
-    public void setCompletedRate(float completedRate) {
+    public void setCompletedRate(Float completedRate) {
         this.completedRate = completedRate;
     }
 }
