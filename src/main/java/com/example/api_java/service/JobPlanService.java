@@ -1,9 +1,6 @@
 package com.example.api_java.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,8 +41,6 @@ public class JobPlanService {
 
         @Autowired
         private JobDailyPlanReportRepository jobDailyPlanReportRepository;
-
-        private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         public Optional<UserWeekPlanDTO> getJobPlan(UserWeekPlanRequestDTO jobRequest) {
                 // Fetch the record that matches the criteria from the job_weekly_plan table
