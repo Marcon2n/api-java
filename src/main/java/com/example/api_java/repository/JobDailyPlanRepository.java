@@ -14,4 +14,9 @@ public interface JobDailyPlanRepository extends JpaRepository<JobDailyPlan, Stri
 
     @Query("SELECT d FROM JobDailyPlan d WHERE d.jobWeeklyPlan.id = :jobWeeklyPlanId")
     List<JobDailyPlan> findByJobWeeklyPlanId(@Param("jobWeeklyPlanId") String jobWeeklyPlanId);
+
+    @Query("SELECT d FROM JobDailyPlan d WHERE d.assignee = :assignee AND d.actionDate IN :actionDateRange")
+    List<JobDailyPlan> findByAssigneeAndActionDateRange(
+            @Param("assignee") String assignee,
+            @Param("actionDateRange") List<String> actionDateRange);
 }

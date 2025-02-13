@@ -2,11 +2,13 @@ package com.example.api_java.controller;
 
 import com.example.api_java.dto.request.DailyReportUserDTO;
 import com.example.api_java.dto.request.MapDataPairDTO;
+import com.example.api_java.dto.request.UserDateRangeRequest;
 import com.example.api_java.dto.request.UserWeekPlanDTO;
 import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekReportAllUserDTO;
+import com.example.api_java.service.JobDateRangeReportService;
 import com.example.api_java.service.JobPlanService;
-import com.example.api_java.service.JobWeekReportAllUser;
+import com.example.api_java.service.JobWeekReportAllUserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,10 @@ public class UserController {
     private JobPlanService jobPlanService;
 
     @Autowired
-    private JobWeekReportAllUser jobWeekReportAllUser;
+    private JobWeekReportAllUserService jobWeekReportAllUserService;
+
+    @Autowired
+    private JobDateRangeReportService jobDateRangeReportService;
 
     @PostMapping("/weekly-plan/user")
     public Optional<UserWeekPlanDTO> getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
@@ -38,14 +43,14 @@ public class UserController {
         System.out.println(request);
         // return List.of(new WeekReportAllUserDTO(null, null, null), new
         // WeekReportAllUserDTO(null, null, null));
-        return jobWeekReportAllUser.getWeekReportAllUser(request);
+        return jobWeekReportAllUserService.getWeekReportAllUser(request);
     }
 
     @PostMapping("/daily-plan/statistics")
-    public DailyReportUserDTO getDailyReportUser(@RequestBody Object request) {
+    public Optional<DailyReportUserDTO> getDailyReportUser(@RequestBody UserDateRangeRequest request) {
         // TODO: process POST request
-        System.out.println(request);
-        return new DailyReportUserDTO(null, null);
+        // return new DailyReportUserDTO(null, null);
+        return jobDateRangeReportService.getUserDateRangeReport(request);
     }
 
     @PostMapping("/weekly-plan/daily-routing")

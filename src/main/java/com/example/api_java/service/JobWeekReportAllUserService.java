@@ -11,7 +11,6 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.api_java.dto.request.DailyTaskDTO;
 import com.example.api_java.dto.request.ReportDTO;
 import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekReportAllUserDTO;
@@ -25,7 +24,7 @@ import com.example.api_java.repository.JobWeeklyPlanReportRepository;
 import com.example.api_java.repository.JobWeeklyPlanRepository;
 
 @Service
-public class JobWeekReportAllUser {
+public class JobWeekReportAllUserService {
     @Autowired
     private JobWeeklyPlanRepository jobWeeklyPlanRepository;
 
