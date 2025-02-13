@@ -66,12 +66,14 @@ public class JobPlanService {
                 JobWeeklyPlanReport weekReport = jobWeeklyPlanReportRepository.findByJobWeeklyPlanId(jobWeeklyPlanId);
 
                 // Map the week report to ReportDTO
-                return new ReportDTO(
-                                weekReport.getJobType(),
-                                weekReport.getTotalDebt(),
-                                weekReport.getCompletedCount(),
-                                weekReport.getIncompletedCount(),
-                                weekReport.getTotalDistance());
+
+                ReportDTO report = new ReportDTO();
+                report.setJobType(weekReport.getJobType());
+                report.setTotalDebt(weekReport.getTotalDebt());
+                report.setCompleteDebt(weekReport.getCompletedCount());
+                report.setIncompleteDebt(weekReport.getIncompletedCount());
+                report.setTotalDistance(weekReport.getTotalDistance());
+                return report;
         }
 
         private List<DailyTaskDTO> getDailyTask(String jobWeekPlanId) {
@@ -146,7 +148,14 @@ public class JobPlanService {
                 int incompletedCount = totalDebt - completedCount;
                 int totalDistance = reports.stream().mapToInt(JobDailyPlanReport::getTotalDistance).sum();
 
-                return new ReportDTO("Field", totalDebt, completedCount, incompletedCount, totalDistance);
+                ReportDTO report = new ReportDTO();
+                report.setJobType("FIELD");
+                report.setTotalDebt(totalDebt);
+                report.setCompleteDebt(completedCount);
+                report.setIncompleteDebt(incompletedCount);
+                report.setTotalDistance(totalDistance);
+
+                return report;
         }
 
         private UserWeekPlanDTO mapToUserWeekPlanDTO(JobWeeklyPlan weeklyPlan, ReportDTO weekReportDTO,

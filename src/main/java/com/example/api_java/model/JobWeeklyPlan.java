@@ -103,4 +103,17 @@ public class JobWeeklyPlan {
         this.locked = locked;
     }
 
+    @Override
+    public String toString() {
+        return "JobWeeklyPlan{" +
+                "id='" + id + '\'' +
+                ", assignee=" + assignee +
+                ", kpi='" + kpi + '\'' +
+                ", week='" + week + '\'' +
+                ", month='" + month + '\'' +
+                ", year='" + year + '\'' +
+                ", fromDate='" + fromDate + '\'' +
+                ", toDate='" + toDate + '\'' +
+                '}';
+    }
 }

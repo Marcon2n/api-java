@@ -1,7 +1,5 @@
 package com.example.api_java.dto.request;
 
-import com.example.api_java.util.ActionStatus;
-
 public class TaskDTO {
     private String id;
     private int order;

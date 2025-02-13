@@ -6,6 +6,7 @@ import com.example.api_java.dto.request.UserWeekPlanDTO;
 import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekReportAllUserDTO;
 import com.example.api_java.service.JobPlanService;
+import com.example.api_java.service.JobWeekReportAllUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,9 @@ public class UserController {
     @Autowired
     private JobPlanService jobPlanService;
 
+    @Autowired
+    private JobWeekReportAllUser jobWeekReportAllUser;
+
     @PostMapping("/weekly-plan/user")
     public Optional<UserWeekPlanDTO> getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
         // TODO: process POST request
@@ -29,10 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/weekly-plan/result")
-    public List<WeekReportAllUserDTO> getWeekReportUser(@RequestBody Object request) {
+    public Optional<List<WeekReportAllUserDTO>> getWeekReportUser(@RequestBody UserWeekPlanRequestDTO request) {
         // TODO: process POST request
         System.out.println(request);
-        return List.of(new WeekReportAllUserDTO(null, null, null), new WeekReportAllUserDTO(null, null, null));
+        // return List.of(new WeekReportAllUserDTO(null, null, null), new
+        // WeekReportAllUserDTO(null, null, null));
+        return jobWeekReportAllUser.getWeekReportAllUser(request);
     }
 
     @PostMapping("/daily-plan/statistics")
