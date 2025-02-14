@@ -18,7 +18,7 @@ public class GeoDistance {
     @JoinColumn(name = "to_geo_id")
     private Geo toGeo;
 
-    private Float distance;
+    private int distance;
 
     public String getId() {
         return id;
@@ -44,11 +44,20 @@ public class GeoDistance {
         this.toGeo = toGeo;
     }
 
-    public Float getDistance() {
+    public int getDistance() {
         return distance;
     }
 
-    public void setDistance(Float distance) {
+    public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public String toString() {
+        return "JobWeeklyPlan{" +
+                "id='" + id + '\'' +
+                ", fromGeo=" + fromGeo +
+                ", toGeo=" + toGeo +
+                ", distance=" + distance +
+                '}';
     }
 }

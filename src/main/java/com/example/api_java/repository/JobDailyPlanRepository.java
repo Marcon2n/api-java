@@ -1,6 +1,7 @@
 package com.example.api_java.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,8 @@ import com.example.api_java.model.JobDailyPlan;
 
 @Repository
 public interface JobDailyPlanRepository extends JpaRepository<JobDailyPlan, String> {
+    @Query("SELECT d FROM JobDailyPlan d WHERE d.id = :id")
+    Optional<JobDailyPlan> findJobDailyPlanById(@Param("id") String id);
 
     @Query("SELECT d FROM JobDailyPlan d WHERE d.jobWeeklyPlan.id = :jobWeeklyPlanId")
     List<JobDailyPlan> findByJobWeeklyPlanId(@Param("jobWeeklyPlanId") String jobWeeklyPlanId);
@@ -19,4 +22,9 @@ public interface JobDailyPlanRepository extends JpaRepository<JobDailyPlan, Stri
     List<JobDailyPlan> findByAssigneeAndActionDateRange(
             @Param("assignee") String assignee,
             @Param("actionDateRange") List<String> actionDateRange);
+
+    @Query("SELECT d FROM JobDailyPlan d WHERE d.assignee = :assignee AND d.actionDate = :actionDate")
+    List<JobDailyPlan> findByAssigneeAndActionDate(
+            @Param("assignee") String assignee,
+            @Param("actionDate") String actionDate);
 }

@@ -112,6 +112,7 @@ public class JobWeeklyPlan {
                 ", week='" + week + '\'' +
                 ", month='" + month + '\'' +
                 ", year='" + year + '\'' +
+                ", startGeo='" + startGeo + '\'' +
                 ", fromDate='" + fromDate + '\'' +
                 ", toDate='" + toDate + '\'' +
                 '}';

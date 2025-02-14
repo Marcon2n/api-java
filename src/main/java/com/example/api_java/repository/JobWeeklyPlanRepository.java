@@ -18,5 +18,8 @@ public interface JobWeeklyPlanRepository extends JpaRepository<JobWeeklyPlan, St
             @Param("month") int month,
             @Param("year") int year);
 
+    @Query("SELECT j FROM JobWeeklyPlan j WHERE j.id = :id")
+    Optional<JobWeeklyPlan> findById(@Param("id") String id);
+
     Optional<JobWeeklyPlan> findByAssigneeAndWeekAndMonthAndYear(String assignee, int week, int month, int year);
 }

@@ -1,11 +1,13 @@
 package com.example.api_java.controller;
 
 import com.example.api_java.dto.request.DailyReportUserDTO;
+import com.example.api_java.dto.request.DailyRequestId;
 import com.example.api_java.dto.request.MapDataPairDTO;
 import com.example.api_java.dto.request.UserDateRangeRequest;
 import com.example.api_java.dto.request.UserWeekPlanDTO;
 import com.example.api_java.dto.request.UserWeekPlanRequestDTO;
 import com.example.api_java.dto.request.WeekReportAllUserDTO;
+import com.example.api_java.service.DailyRoutingService;
 import com.example.api_java.service.JobDateRangeReportService;
 import com.example.api_java.service.JobPlanService;
 import com.example.api_java.service.JobWeekReportAllUserService;
@@ -28,6 +30,9 @@ public class UserController {
 
     @Autowired
     private JobDateRangeReportService jobDateRangeReportService;
+
+    @Autowired
+    private DailyRoutingService dailyRoutingService;
 
     @PostMapping("/weekly-plan/user")
     public Optional<UserWeekPlanDTO> getWeekPlanByUser(@RequestBody UserWeekPlanRequestDTO request) {
@@ -54,9 +59,11 @@ public class UserController {
     }
 
     @PostMapping("/weekly-plan/daily-routing")
-    public List<MapDataPairDTO> getDayDistance(@RequestBody Object request) {
+    public Optional<List<MapDataPairDTO>> getDayDistance(@RequestBody DailyRequestId request) {
         // TODO: process POST request
         System.out.println(request);
-        return List.of(new MapDataPairDTO(null, null), new MapDataPairDTO(null, null));
+        // return List.of(new MapDataPairDTO(null, null), new MapDataPairDTO(null,
+        // null));
+        return dailyRoutingService.getDailyRouting(request);
     }
 }
